@@ -1,0 +1,83 @@
+<style>
+
+
+.container {
+  max-width: 600px;
+  margin: 50px auto;
+  text-align: center;
+  background-color: #fff;
+  padding: 20px;
+  box-shadow: 0 0 10px #ccc;
+}
+
+input[type="text"] {
+  padding: 10px;
+  font-size: 16px;
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 20px;
+}
+
+button[type="submit"] {
+  padding: 10px 20px;
+  background-color: #333;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#result {
+  margin-top: 20px;
+  font-size: 18px;
+}
+
+</style>
+    <div class="container">
+     
+      <form>
+        <label for="url">Enter a website URL:</label>
+        <input type="text" id="url" name="url">
+        <button id="pingBtn">Ping</button>
+      </form>
+      <div id="result"></div>
+    </div>
+   <script>
+document.getElementById("pingBtn").addEventListener("click", function(event) {
+  event.preventDefault();
+
+  let url = document.getElementById("url").value;
+  let proxyServers = [
+    "https://crossorigin.me/",
+    "https://cors.io/",
+    "https://cors-proxy.htmldriven.com/",
+    "https://allorigins.win/",
+    "https://corsproxy.github.io/"
+  ];
+  let currentServer = 0;
+
+  function sendRequest() {
+    let xhr = new XMLHttpRequest();
+
+    xhr.open("GET", proxyServers[currentServer] + url, true);
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+        document.getElementById("result").innerHTML = "Successful Ping: " + url;
+      } else if (xhr.readyState === XMLHttpRequest.DONE) {
+        currentServer++;
+        if (currentServer < proxyServers.length) {
+          sendRequest();
+        } else {
+          document.getElementById("result").innerHTML = "Failed to Ping: " + url;
+        }
+      }
+    };
+
+    xhr.send();
+  }
+
+  sendRequest();
+});
+
+
+   </script>
